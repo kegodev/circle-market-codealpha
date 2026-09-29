@@ -2,22 +2,22 @@
 
 # Circle Market
 
-**A curated clothing storefront built for the CodeAlpha internship.** Circle Market carries the light teal palette and clean card layout of the [Circle social app](https://github.com/kegodev/circle-mini-social-express-supabase) into a complete small-store shopping journey.
+**An easygoing clothing marketplace built for the CodeAlpha internship.** Circle Market brings a small collection of everyday pieces into a calm, responsive storefront with soft colour, clear product photography-style illustrations and a simple path from discovery to order.
 
-The store lets visitors browse and filter a six-piece clothing catalog, open individual product pages, and keep a shopping bag across refreshes. Customers sign in with Supabase Auth to place a sample order and revisit their order history. Checkout recalculates prices from the database, reserves stock inside one PostgreSQL transaction, and gives each order an ID. This is a **demonstration store**: it does not collect payment or arrange shipping.
+The collection features six fictional clothing products across shirts, layers and bottoms. Shoppers can filter the catalog, explore a dedicated page for each piece, adjust quantities in a shopping bag that persists across refreshes, and see prices in South African rand. A signed-in customer can place a sample order and revisit its status and line items in an order history view.
 
-## What the app includes
+> Circle Market is a portfolio demonstration. Orders are recorded in the app, but no payment is collected and no goods are shipped.
 
-- Responsive product listings with category filters and stock indicators
-- Dedicated product detail pages
-- Persistent shopping bag with quantity controls and live totals
-- Email/password account registration and sign-in
-- Express API for catalog, checkout and customer order history
-- Atomic order creation with server-side price lookup and stock reservation
-- Row Level Security so customers can view only their own orders
-- Isolated `shop_*` tables inside the existing Dinglo Supabase project
+## The experience
 
-## Built with
+- A responsive catalog with category filters, featured picks and stock visibility
+- Individual product details with descriptions, prices and add-to-bag actions
+- A persistent shopping bag with quantity controls and live subtotal
+- Email and password accounts for sample checkout and order history
+- Server-validated order processing with stock reservation and order records
+- Original illustrations for all six fictional clothing products
+
+## Languages and tools
 
 <p>
 <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/html5/html5-original.svg" width="36" alt="HTML5"> &nbsp;
@@ -29,38 +29,16 @@ The store lets visitors browse and filter a six-piece clothing catalog, open ind
 <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/postgresql/postgresql-original.svg" width="36" alt="PostgreSQL">
 </p>
 
-| Layer | Implementation |
-| --- | --- |
-| Frontend | Vanilla HTML, CSS, JavaScript |
-| Backend | Node.js and Express.js |
-| Authentication | Supabase Auth |
-| Data | Supabase PostgreSQL with Row Level Security |
-| Checkout | PostgreSQL function with transaction and row locks |
+| Part | Technology | Role |
+| --- | --- | --- |
+| Storefront | HTML, CSS, JavaScript | Product browsing, details and shopping bag |
+| API | Node.js, Express.js | Catalog, session checks and order endpoints |
+| Accounts | Supabase Auth | Customer identity |
+| Database | Supabase PostgreSQL | Products, orders and stock |
+| Data protection | Row Level Security | Customer-specific order visibility |
 
-## Shopping journey
+The Express server passes the customer's session to a PostgreSQL checkout function. The function reads current prices, checks quantities, locks products, reserves stock and creates the order in a single transaction. Store data lives in dedicated `shop_*` tables within the Dinglo Supabase project. The browser has only a publishable key; it never receives a privileged database key.
 
-1. Browse products and open a detail page.
-2. Add items to the bag; quantities persist locally.
-3. Register or sign in to submit a sample order.
-4. Express checks the session and calls `shop_place_order` using the customer's token.
-5. PostgreSQL locks the requested products, checks stock, calculates prices, creates the order and order lines, then decrements stock in one transaction.
-6. View the receipt and order history in the app.
+## CodeAlpha internship
 
-The browser never receives a privileged database key. The privileged checkout routine lives in the unexposed `shop_private` schema. The public RPC wrapper runs as the caller and admits authenticated users only. Tables deny direct client writes; RLS restricts order reads to the owner.
-
-## Run locally
-
-Requires Node.js 20 or later. Clone the repository, then run:
-
-```bash
-npm ci
-npm start
-```
-
-Open `http://localhost:3000`. The included public Supabase project URL and publishable key point to the Dinglo project. Apply `supabase/schema.sql` to a different Supabase project and set `SUPABASE_URL` and `SUPABASE_PUBLISHABLE_KEY` to reuse the app elsewhere. Email confirmation may be required by the project's Auth settings.
-
-## Project scope
-
-This internship project demonstrates clothing discovery, client-side cart state, authenticated API routes, relational order data, stock handling, input validation and a mobile-friendly UI. No real payment, shipping, tax, administrative fulfillment or production fraud controls are included.
-
-Built by [Kegorapetse Mangena](https://github.com/kegodev) for **CodeAlpha**.
+Circle Market is a full-stack e-commerce project by [Kegorapetse Mangena](https://github.com/kegodev), covering responsive interface design, a JavaScript shopping bag, Express routes, authentication, relational data and order processing.
